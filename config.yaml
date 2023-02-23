@@ -1,6 +1,17 @@
+# TSP config
 xmax: 100
 ymax: 100
 n_stops: 50
+
+# Animation config
 dt: 0.01
 fps: 10
 nframes: 100
+
+# ACS config
+n_agent: 10
+learning_rate: 0.1
+local_pheromone_update: -1  # -1 means auto pick
+pheromone_importance: 1
+distance_importance: 1
+exploration_rate: 0.1

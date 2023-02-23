@@ -14,8 +14,17 @@ class TSP:
             for j in range(self._n_nodes):
                 self._dist_matrix[i][j] = np.sqrt((self._coords[i, 0] - self._coords[j, 0]) ** 2 + (self._coords[i, 1] - self._coords[j, 1]) ** 2)
 
+    def compute_greedy_solution(self):
+        pass
+
     def get_distances(self, i):
         return self._dist_matrix[i, :]
 
+    def get_dist_matrix(self):
+        return self._dist_matrix
+
     def get_nodes(self):
         return self._coords
+
+    def get_n_nodes(self):
+        return self._n_nodes
