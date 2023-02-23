@@ -4,18 +4,18 @@ import matplotlib.lines
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
-from generate_tsp import generate_tsp
+from tsp import TSP
 from animation import animate
 
 
 matplotlib.use("TkAgg")
 
 with open("config.yaml") as f:
-    consts = yaml.load(f, Loader=yaml.loader.SafeLoader)
-    locals().update(consts)
+    config = yaml.load(f, Loader=yaml.loader.SafeLoader)
 
-points = generate_tsp(NSTOPS)
-print(type(points))
+tsp = TSP(**config)
+points = tsp.get_nodes()
+
 fig = plt.figure()
 plt.scatter(points[:, 0], points[:, 1])
 
@@ -25,9 +25,9 @@ for i in range(NSTOPS):
         connections.append(plt.plot([points[i, 0], points[j, 0]], [points[i, 1], points[j, 1]], 'r-', alpha=0)[0])
 
 def anim(i):
-    return animate(i, connections, DT)
+    return animate(i, connections, config["dt"])
 
-ani = animation.FuncAnimation(fig, anim, frames=NFRAMES, interval=1000//FPS, blit=True, repeat=True)
+ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=True)
 
 plt.show()
 

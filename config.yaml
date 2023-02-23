@@ -1,6 +1,6 @@
-XMAX: 100
-YMAX: 100
-NSTOPS: 50
-DT: 0.01
-FPS: 10
-NFRAMES: 100
+xmax: 100
+ymax: 100
+n_stops: 50
+dt: 0.01
+fps: 10
+nframes: 100
