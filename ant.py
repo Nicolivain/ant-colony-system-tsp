@@ -30,7 +30,7 @@ class Ant:
         if np.random.random() < self._exploration_rate:
             new_pos = np.random.choice(range(distances.shape[0]), p=probs)
         else:
-            new_pos = np.argmax(probs)
+            new_pos = np.nanargmax(probs)
 
         self._previous_pos = self._current_pos
         self._current_pos = new_pos

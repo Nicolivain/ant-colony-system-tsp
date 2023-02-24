@@ -6,14 +6,14 @@ from ant import Ant
 
 def get_greedy_path(value_matrix, cost_matrix=None):
     cost_matrix = value_matrix if cost_matrix is None else cost_matrix
-    current = None
+    current = 0
     path = [0]
     total_cost = 0
-    while current != 0:
+    while len(path) < value_matrix.shape[0]:
         values = value_matrix[current, :]
         mask = np.ones_like(values)
         mask[path] = 0
-        next_node = np.argmax(mask * values)
+        next_node = np.nanargmax(mask * values)
         path.append(next_node)
         total_cost += cost_matrix[current, next_node]
         current = next_node
@@ -28,7 +28,7 @@ class ACS:
             consts = yaml.load(f, Loader=yaml.loader.SafeLoader)
 
         self._pheromone_impact = consts["pheromone_impact"]
-        self._dist_impact = consts["dist_impact"]
+        self._dist_impact = consts["distance_impact"]
         self._exploration_rate = consts["exploration_rate"]
         self._lr = consts["learning_rate"]
 
