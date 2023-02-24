@@ -5,7 +5,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 from tsp import TSP
-from acs import ACS
+from acs import ACS, get_greedy_path, plot_path
 from animation import animate
 
 
@@ -16,26 +16,22 @@ with open("config.yaml") as f:
 
 tsp = TSP(**config)
 points = tsp.get_nodes()
-acs = ACS(tsp, 1)
+acs = ACS(tsp, 3)
 
-fig, ax = plt.subplots()
-ax.scatter(points[:, 0], points[:, 1])
+path, tc = get_greedy_path(value_matrix=1/acs.get_dist_matrix(), cost_matrix=acs.get_dist_matrix())
+ax = plot_path(points, path)
+print(tc)
 plt.show()
-plt.clf()
 
-for k in range(100):
+for k in range(60):
     acs.step()
     value_matrix = acs.get_value_matrix()
     z = np.max(value_matrix[value_matrix != np.inf])
 
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.scatter(points[:, 0], points[:, 1])
-    for i in range(tsp.get_n_nodes()):
-        for j in range(i + 1, tsp.get_n_nodes()):
-            ax.plot([points[i, 0], points[j, 0]], [points[i, 1], points[j, 1]], 'r-', alpha=value_matrix[i, j]/z)
-
-    plt.show()
-
+path, tc = get_greedy_path(value_matrix=1/acs.get_value_matrix(), cost_matrix=acs.get_dist_matrix())
+ax = plot_path(points, path)
+print(tc)
+plt.show()
 
 
 

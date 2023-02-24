@@ -37,7 +37,7 @@ class Ant:
         self._memory.append(new_pos)
         self._total_cost += distances[new_pos]
 
-        if self._current_pos == self._start_index:
+        if len(self._memory) == distances.shape[0]:
             self._finished_lap = True
         else:
             self._finished_lap = False

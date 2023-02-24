@@ -1,7 +1,7 @@
 # TSP config
 xmax: 100
 ymax: 100
-n_nodes: 10
+n_nodes: 20
 
 # Animation config
 dt: 0.01
