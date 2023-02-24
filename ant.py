@@ -25,8 +25,8 @@ class Ant:
         mask[self._memory] = 0
 
         probs = mask * (1/distances)**self._dist_impact * pheromones**self._p_impact
-        probs = probs / np.sum(probs)
-
+        probs = probs / np.nansum(probs)
+        probs[np.isnan(probs)] = 0
         if np.random.random() < self._exploration_rate:
             new_pos = np.random.choice(range(distances.shape[0]), p=probs)
         else:

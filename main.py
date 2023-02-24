@@ -21,13 +21,13 @@ acs = ACS(tsp, 1)
 fig, ax = plt.subplots()
 ax.scatter(points[:, 0], points[:, 1])
 plt.show()
+plt.clf()
 
-for i in range(100):
+for k in range(100):
     acs.step()
     value_matrix = acs.get_value_matrix()
-    z = np.max(value_matrix)
+    z = np.max(value_matrix[value_matrix != np.inf])
 
-    plt.clf()
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.scatter(points[:, 0], points[:, 1])
     for i in range(tsp.get_n_nodes()):
