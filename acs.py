@@ -20,7 +20,6 @@ def get_greedy_path(value_matrix, cost_matrix=None):
     return path, total_cost
 
 
-
 class ACS:
     def __init__(self, tsp, n_agents):
         self._tsp = tsp
@@ -61,6 +60,15 @@ class ACS:
     def get_current_best_path(self):
         value_matrix = (1 / self._dist_matrix)**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
         return get_greedy_path(value_matrix, self._dist_matrix)
+
+    def get_value_matrix(self):
+        return (1 / self._dist_matrix)**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
+
+    def get_dist_matrix(self):
+        return self._dist_matrix
+
+    def get_pheromone_matrix(self):
+        return self._pheromones_matrix
 
     def _locally_update_pheromone(self, i, j):
         self._pheromones_matrix[i, j] = (1 - self._lr) * self._pheromones_matrix[i, j] + self._lr * self._local_pheromone_update
