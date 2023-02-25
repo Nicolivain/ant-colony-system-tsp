@@ -20,12 +20,13 @@ def get_greedy_path(value_matrix, cost_matrix=None):
         current = next_node
     return path, total_cost
 
+
 def plot_path(nodes, path):
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.scatter(nodes[:, 0], nodes[:, 1])
     for i in range(-1, len(path)-1):
-        j = i+1
-        ax.plot([nodes[i, 0], nodes[j, 0]], [nodes[i, 1], nodes[j, 1]], 'g-')
+        vp, vn = path[i], path[i+1]
+        ax.plot([nodes[vp, 0], nodes[vn, 0]], [nodes[vp, 1], nodes[vn, 1]], 'g-')
     return ax
 
 

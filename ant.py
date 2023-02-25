@@ -18,8 +18,8 @@ class Ant:
 
     def move(self, distances, pheromones):
         if self._finished_lap:
-            self._current_pos = self._start_index
-            self._memory = [self._start_index]
+            self._memory = [self._current_pos]
+            self._total_cost = 0
 
         mask = np.ones_like(distances)
         mask[self._memory] = 0
