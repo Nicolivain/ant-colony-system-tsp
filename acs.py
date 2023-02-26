@@ -43,10 +43,13 @@ class ACS:
         self._lr = consts["learning_rate"]
 
         self._dist_matrix = self._tsp.get_dist_matrix()
-        self._pheromones_matrix = np.ones_like(self._dist_matrix) / tsp.get_n_nodes() ** 2
+
+        self._best_tour, self._best_tour_length = get_greedy_path(1 / self._dist_matrix, self._dist_matrix)
+        self._tour_history = [(self._best_tour, self._best_tour_length)]
 
         self._local_pheromone_update = consts["local_pheromone_update"]
-        self._local_pheromone_update = self._local_pheromone_update if self._local_pheromone_update > 0 else 1 / tsp.get_n_nodes() / get_greedy_path(1/self._dist_matrix, self._dist_matrix)[1]
+        self._local_pheromone_update = self._local_pheromone_update if self._local_pheromone_update > 0 else 1 / tsp.get_n_nodes() / self._best_tour_length
+        self._pheromones_matrix = np.ones_like(self._dist_matrix) * self._local_pheromone_update
 
         start_pos = np.random.randint(0, tsp.get_n_nodes(), n_agents)
         self._ants = [Ant(start_index=s, pheromone_impact=self._pheromone_impact, dist_impact=self._dist_impact, exploration_rate=self._exploration_rate) for s in start_pos]
@@ -62,10 +65,13 @@ class ACS:
 
         # we check if the ants have finished their lap, note that all finish at the same time
         if self._ants[0].finished_lap():
-            for ant in self._ants:
-                path = ant.get_path()
-                delta_pheromones = 1 / ant.get_total_cost()
-                self._globally_update_pheromone(path, delta_pheromones)
+            ant_tour_length = [ant.get_total_cost() for ant in self._ants]
+            self._tour_history = self._tour_history + [(ant.get_path(), ant.get_total_cost()) for ant in self._ants]
+            if min(ant_tour_length) < self._best_tour_length:
+                self._best_tour = ant.get_path()
+                self._best_tour_length = min(ant_tour_length)
+            delta_pheromones = 1 / self._best_tour_length
+            self._globally_update_pheromone(self._best_tour, delta_pheromones)
 
     def get_current_best_path(self):
         value_matrix = (1 / self._dist_matrix)**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
@@ -82,13 +88,13 @@ class ACS:
 
     def _locally_update_pheromone(self, i, j):
         self._pheromones_matrix[i, j] = (1 - self._lr) * self._pheromones_matrix[i, j] + self._lr * self._local_pheromone_update
-        self._pheromones_matrix[j, i] = (1 - self._lr) * self._pheromones_matrix[i, j] + self._lr * self._local_pheromone_update
+        self._pheromones_matrix[j, i] = (1 - self._lr) * self._pheromones_matrix[j, i] + self._lr * self._local_pheromone_update
 
     def _globally_update_pheromone(self, path, delta_pheromones):
         for i in range(len(path)-1):
             vp, vn = path[i], path[i+1]
             self._pheromones_matrix[vn, vp] = (1 - self._lr) * self._pheromones_matrix[vn, vp] + self._lr * delta_pheromones
-            self._pheromones_matrix[vn, vp] = (1 - self._lr) * self._pheromones_matrix[vn, vp] + self._lr * delta_pheromones
+            self._pheromones_matrix[vp, vn] = (1 - self._lr) * self._pheromones_matrix[vp, vn] + self._lr * delta_pheromones
 
 
 

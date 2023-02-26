@@ -16,19 +16,17 @@ with open("config.yaml") as f:
 
 tsp = TSP(**config)
 points = tsp.get_nodes()
-acs = ACS(tsp, 3)
+acs = ACS(tsp, config["n_agent"])
 
 path, tc = get_greedy_path(value_matrix=1/acs.get_dist_matrix(), cost_matrix=acs.get_dist_matrix())
 ax = plot_path(points, path)
 print(tc)
 plt.show()
 
-for k in range(60):
+for k in range(1000):
     acs.step()
-    value_matrix = acs.get_value_matrix()
-    z = np.max(value_matrix[value_matrix != np.inf])
 
-path, tc = get_greedy_path(value_matrix=1/acs.get_value_matrix(), cost_matrix=acs.get_dist_matrix())
+path, tc = get_greedy_path(value_matrix=acs.get_value_matrix(), cost_matrix=acs.get_dist_matrix())
 ax = plot_path(points, path)
 print(tc)
 plt.show()
