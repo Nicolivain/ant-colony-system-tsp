@@ -18,7 +18,7 @@ tsp = TSP(**config)
 points = tsp.get_nodes()
 acs = ACS(tsp, config["n_agent"])
 
-path, tc = get_greedy_path(value_matrix=1/acs.get_dist_matrix(), cost_matrix=acs.get_dist_matrix())
+path, tc = get_greedy_path(value_matrix=acs.get_inv_dist_matrix(), cost_matrix=acs.get_dist_matrix())
 ax = plot_path(points, path)
 print(tc)
 plt.show()
@@ -31,7 +31,7 @@ ax = plot_path(points, path)
 print(tc)
 plt.show()
 
-
+print("done")
 
 """
 connections = []

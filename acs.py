@@ -43,8 +43,9 @@ class ACS:
         self._lr = consts["learning_rate"]
 
         self._dist_matrix = self._tsp.get_dist_matrix()
+        self._inv_dist_matrix = np.power(self._dist_matrix, -1, out=np.zeros_like(self._dist_matrix), where=self._dist_matrix != 0)
 
-        self._best_tour, self._best_tour_length = get_greedy_path(1 / self._dist_matrix, self._dist_matrix)
+        self._best_tour, self._best_tour_length = get_greedy_path(self._inv_dist_matrix, self._dist_matrix)
         self._tour_history = [(self._best_tour, self._best_tour_length)]
 
         self._local_pheromone_update = consts["local_pheromone_update"]
@@ -57,7 +58,7 @@ class ACS:
     def step(self):
         for ant in self._ants:
             pos = ant.get_current_pos()
-            ant.move(self._dist_matrix[pos, :], self._pheromones_matrix[pos, :])
+            ant.move(self._inv_dist_matrix[pos, :], self._pheromones_matrix[pos, :])
 
             # local updating of the pheromones
             vp, vn = ant.get_last_vertex()
@@ -68,8 +69,9 @@ class ACS:
             ant_tour_length = [ant.get_total_cost() for ant in self._ants]
             self._tour_history = self._tour_history + [(ant.get_path(), ant.get_total_cost()) for ant in self._ants]
             if min(ant_tour_length) < self._best_tour_length:
-                self._best_tour = ant.get_path()
                 self._best_tour_length = min(ant_tour_length)
+                best_ant = np.argmin(ant_tour_length)
+                self._best_tour = self._ants[best_ant].get_path()
             delta_pheromones = 1 / self._best_tour_length
             self._globally_update_pheromone(self._best_tour, delta_pheromones)
 
@@ -78,10 +80,13 @@ class ACS:
         return get_greedy_path(value_matrix, self._dist_matrix)
 
     def get_value_matrix(self):
-        return (1 / self._dist_matrix)**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
+        return self._inv_dist_matrix**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
 
     def get_dist_matrix(self):
         return self._dist_matrix
+
+    def get_inv_dist_matrix(self):
+        return self._inv_dist_matrix
 
     def get_pheromone_matrix(self):
         return self._pheromones_matrix
@@ -95,9 +100,3 @@ class ACS:
             vp, vn = path[i], path[i+1]
             self._pheromones_matrix[vn, vp] = (1 - self._lr) * self._pheromones_matrix[vn, vp] + self._lr * delta_pheromones
             self._pheromones_matrix[vp, vn] = (1 - self._lr) * self._pheromones_matrix[vp, vn] + self._lr * delta_pheromones
-
-
-
-
-
-

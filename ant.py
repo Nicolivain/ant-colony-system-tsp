@@ -16,28 +16,33 @@ class Ant:
 
         self._finished_lap = False
 
-    def move(self, distances, pheromones):
-        if self._finished_lap:
-            self._memory = [self._current_pos]
-            self._total_cost = 0
+    def reset(self):
+        self._current_pos = self._start_index
+        self._previous_pos = None
+        self._memory = [self._start_index]
+        self._total_cost = 0
 
-        mask = np.ones_like(distances)
+    def move(self, inv_distances, pheromones):
+        if self._finished_lap:
+            self.reset()
+
+        mask = np.ones_like(inv_distances)
         mask[self._memory] = 0
 
-        probs = mask * (1/distances)**self._dist_impact * pheromones**self._p_impact
+        probs = mask * inv_distances**self._dist_impact * pheromones**self._p_impact
         probs = probs / np.nansum(probs)
         probs[np.isnan(probs)] = 0
         if np.random.random() < self._exploration_rate:
-            new_pos = np.random.choice(range(distances.shape[0]), p=probs)
+            new_pos = np.random.choice(range(inv_distances.shape[0]), p=probs)
         else:
             new_pos = np.nanargmax(probs)
 
         self._previous_pos = self._current_pos
         self._current_pos = new_pos
         self._memory.append(new_pos)
-        self._total_cost += distances[new_pos]
+        self._total_cost += 1/(inv_distances[new_pos])
 
-        if len(self._memory) == distances.shape[0]:
+        if len(self._memory) == inv_distances.shape[0]:
             self._finished_lap = True
         else:
             self._finished_lap = False
