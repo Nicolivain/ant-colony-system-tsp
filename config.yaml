@@ -6,7 +6,7 @@ n_nodes: 25
 # Animation config
 dt: 0.01
 fps: 10
-nframes: 100
+n_frames: 1000
 
 # ACS config
 n_agent: 1

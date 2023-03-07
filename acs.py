@@ -76,7 +76,7 @@ class ACS:
             self._globally_update_pheromone(self._best_tour, delta_pheromones)
 
     def get_current_best_path(self):
-        value_matrix = (1 / self._dist_matrix)**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
+        value_matrix = self._inv_dist_matrix**self._dist_impact * self._pheromones_matrix**self._pheromone_impact
         return get_greedy_path(value_matrix, self._dist_matrix)
 
     def get_value_matrix(self):

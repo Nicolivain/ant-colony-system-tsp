@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from tsp import TSP
 from acs import ACS, get_greedy_path, plot_path
-from animation import animate
+from animation import create_animation_figure, update_alpha, animate
 
 
 matplotlib.use("TkAgg")
@@ -15,22 +15,23 @@ with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.loader.SafeLoader)
 
 tsp = TSP(**config)
-points = tsp.get_nodes()
+nodes = tsp.get_nodes()
 acs = ACS(tsp, config["n_agent"])
 
 path, tc = get_greedy_path(value_matrix=acs.get_inv_dist_matrix(), cost_matrix=acs.get_dist_matrix())
-ax = plot_path(points, path)
+fig, axs, connections, best_path = create_animation_figure(tsp, acs)
+update_alpha(acs.get_value_matrix(), connections)
 print(tc)
 plt.show()
 
-for k in range(1000):
-    acs.step()
 
-path, tc = get_greedy_path(value_matrix=acs.get_value_matrix(), cost_matrix=acs.get_dist_matrix())
-ax = plot_path(points, path)
+def anim(i):
+    return animate(connections, best_path, nodes, acs, steps_per_frame=10)
+
+
+ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=False)
+
 print(tc)
-plt.show()
-
 print("done")
 
 """
@@ -40,9 +41,5 @@ for i in range(tsp.get_n_nodes()):
         connections.append(plt.plot([points[i, 0], points[j, 0]], [points[i, 1], points[j, 1]], 'r-', alpha=0)[0])
 
 
-def anim(i):
-    return animate(i, connections, config["dt"])
 
-
-ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=True)
 """
