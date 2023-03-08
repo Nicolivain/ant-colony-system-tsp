@@ -32,7 +32,7 @@ def update_best_path(nodes, path, vertexes):
     for i in range(-1, len(path)-1):
         vp, vn = path[i], path[i+1]
         vertexes[i+1].set_xdata([nodes[vp, 0], nodes[vn, 0]])
-        vertexes[i].set_ydata([nodes[vp, 1], nodes[vn, 1]])
+        vertexes[i+1].set_ydata([nodes[vp, 1], nodes[vn, 1]])
     return vertexes
 
 
