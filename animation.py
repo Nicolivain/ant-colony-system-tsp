@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 
 def create_connections(n, points, ax):
-    connections = {}
+    connections = []
     for i in range(n):
         for j in range(i + 1, n):
-            connections[str(i) + str(j)] = ax.plot([points[i, 0], points[j, 0]], [points[i, 1], points[j, 1]], 'r-', alpha=0)[0]
+            connections.append(ax.plot([points[i, 0], points[j, 0]], [points[i, 1], points[j, 1]], 'r-', alpha=0)[0])
     return connections
 
 
@@ -20,9 +20,11 @@ def create_best_path(nodes, path, ax):
 
 def update_alpha(value_matrix, connections):
     value_matrix = value_matrix / np.sum(value_matrix, axis=1)
+    k = 0
     for i in range(value_matrix.shape[0]):
         for j in range(i+1, value_matrix.shape[0]):
-            connections[str(i) + str(j)].set_alpha(value_matrix[i, j])
+            connections[k].set_alpha(value_matrix[i, j])
+            k += 1
     return connections
 
 
@@ -51,4 +53,4 @@ def animate(connections, best_path, nodes, acs, steps_per_frame=1):
         acs.step()
     connections = update_alpha(acs.get_value_matrix(), connections)
     vertexes = update_best_path(nodes, acs.get_current_best_path()[0], best_path)
-    return connections.keys() + vertexes
+    return connections + vertexes
