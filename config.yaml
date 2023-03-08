@@ -4,14 +4,13 @@ ymax: 100
 n_nodes: 25
 
 # Animation config
-dt: 0.01
-fps: 10
-n_frames: 1000
+fps: 1
+n_frames: 100
 
 # ACS config
 n_agent: 5
 learning_rate: 0.1
 local_pheromone_update: -1  # -1 means auto pick
-pheromone_impact: 2
+pheromone_impact: 1
 distance_impact: 1
-exploration_rate: 0.1
+exploration_rate: 0.2

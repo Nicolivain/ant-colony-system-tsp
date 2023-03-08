@@ -23,9 +23,6 @@ class Ant:
         self._total_cost = 0
 
     def move(self, inv_distances, pheromones):
-        if self._finished_lap:
-            self.reset()
-
         mask = np.ones_like(inv_distances)
         mask[self._memory] = 0
 
@@ -41,11 +38,6 @@ class Ant:
         self._current_pos = new_pos
         self._memory.append(new_pos)
         self._total_cost += 1/(inv_distances[new_pos])
-
-        if len(self._memory) == inv_distances.shape[0]:
-            self._finished_lap = True
-        else:
-            self._finished_lap = False
 
     def get_current_pos(self):
         return self._current_pos
