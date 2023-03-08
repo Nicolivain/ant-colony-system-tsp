@@ -23,13 +23,11 @@ fig, axs, connections, best_path = create_animation_figure(tsp, acs)
 print(tc)
 
 
-# def anim(i):
-#     print(acs.get_current_best_path())
-#     return animate(connections, best_path, nodes, acs, steps_per_frame=10)
-#
-#
-# ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=True)
-# plt.show()
+def anim(i):
+    return animate(connections, best_path, nodes, acs, steps_per_frame=config["n_steps"] // config["n_frames"])
 
+
+ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=False)
+plt.show()
 print(acs.get_current_best_path())
 print("done")

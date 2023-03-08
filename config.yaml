@@ -4,13 +4,14 @@ ymax: 100
 n_nodes: 25
 
 # Animation config
-fps: 1
+fps: 10
 n_frames: 100
 
 # ACS config
-n_agent: 5
+n_steps: 1000  # number of steps for each ant
+n_agent: 10
 learning_rate: 0.1
 local_pheromone_update: -1  # -1 means auto pick
 pheromone_impact: 1
 distance_impact: 1
-exploration_rate: 0.2
+exploration_rate: 0.1
