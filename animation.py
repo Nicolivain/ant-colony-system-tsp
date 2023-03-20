@@ -42,7 +42,7 @@ def create_animation_figure(tsp, acs):
     axs[0].scatter(nodes[:, 0], nodes[:, 1])
     axs[0].set_title("Vertex Probabilities")
     axs[1].scatter(nodes[:, 0], nodes[:, 1])
-    axs[1].set_title("Best Path")
+    axs[1].set_title("Optimal Utility Path")
     connections = create_connections(tsp.get_n_nodes(), nodes, axs[0])
     best_path = create_best_path(nodes, acs.get_current_best_path()[0], axs[1])
     return fig, axs, connections, best_path
