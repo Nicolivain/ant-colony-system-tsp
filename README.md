@@ -1,10 +1,12 @@
 # Ant Colony System for TSP
-A quick implementation of the ACS solution to the travelling salesman problem with animation.
+A quick implementation of the ACS solution to the travelling salesman problem with animation.  
+Agents will pick the path with the best utility depending on a combination of distance and amount of pheromones.
+In a RL fashion, the colony will converge to the optimal solution.
 
 
 ## Example 
-
-
+In this particular example, the ACS algorithm struck a 20% improvement over the standard greedy algorithm. 
+![anim](figs/230401-132354.gif)
 
 
 ## References

@@ -1,15 +1,14 @@
 import yaml
-import numpy as np
+import datetime
 import matplotlib.lines
 import matplotlib.animation as animation
-import matplotlib.pyplot as plt
 
 from tsp import TSP
-from acs import ACS, get_greedy_path, plot_path
-from animation import create_animation_figure, update_alpha, update_best_path, animate
+from acs import ACS, get_greedy_path
+from animation import create_animation_figure, animate
 
 
-matplotlib.use("TkAgg")
+matplotlib.use("Agg")
 
 with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.loader.SafeLoader)
@@ -27,7 +26,10 @@ def anim(i):
     return animate(connections, best_path, nodes, acs, steps_per_frame=config["n_steps"] // config["n_frames"])
 
 
+time_start = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 ani = animation.FuncAnimation(fig, anim, frames=config["n_frames"], interval=1000//config["fps"], blit=True, repeat=False)
-plt.show()
+writer = animation.PillowWriter(fps=config["fps"])
+ani.save(f'animations/{time_start}.gif', writer=writer)
+
 print(acs.get_current_best_path())
 print("done")
