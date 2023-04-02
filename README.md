@@ -2,7 +2,7 @@
 A quick implementation of the ACS solution to the travelling salesman problem with animation.  
 Agents will pick the path with the best utility depending on a combination of distance and amount of pheromones.
 In a RL fashion, the colony will converge to the optimal solution.
-
+Stability is however a bit difficult to reach and is highly depend on the parameters of the simulation, future work could try to improve this.
 
 ## Example 
 In this particular example, the ACS algorithm struck a 20% improvement over the standard greedy algorithm. 
